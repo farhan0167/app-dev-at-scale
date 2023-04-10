@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  load-balancer-app:
+    build: ./backend
+    ports:
+      - 8001-8005:8000
+    volumes:
+      - ./results:/app/results
+    command: python3 app.py
+  
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    
+    depends_on:
+      - load-balancer-app
